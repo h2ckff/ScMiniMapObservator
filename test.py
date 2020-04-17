@@ -35,24 +35,27 @@ def ScreenGrab(bbox):
 	return im
 
 def GetOutline(im,bbox):
-    OutlineFound = False
-    for y in range (0,221):
-        for x in range (0,261):
-            if im.getpixel((x,y)) == (0, 49, 191):
-                OutlineFound = True
-                break
-    return (OutlineFound)
+	tempList = colorList
+	for y in range (0,222):
+		for x in range (0,262):
+			if im.getpixel((x,y)) == (0, 49, 191):
+				colorList[y*262+x] = 1
+			else:
+				colorList[y*262+x] = 0
+	if tempList == colorList:
+		return False
+	else:
+		return True
 
-def Main(xbbox,ybbox):
+def Main(xbbox,ybbox,colorList):
 
 	sct = mss()
 	bbox={'width':int(xbbox),'left':int(27),'height':int(ybbox),'top':int(826)}
 
 	while 1==1:
 		im=ScreenGrab(bbox)
-		OutlineFound=GetOutline(im,bbox)
 
-		if OutlineFound:
+		if GetOutline(im,bbox):
 			print("jest")
 			frequency = 2500
 			duration = 1000
@@ -62,6 +65,9 @@ def Main(xbbox,ybbox):
 
 
 if __name__ == "__main__":
+	colorList = []
+	for i in range(0, 58164):
+		colorList.append(i)
 	xbbox = 262
 	ybbox = 222
-	Main(xbbox,ybbox)
+	Main(xbbox,ybbox,colorList)
